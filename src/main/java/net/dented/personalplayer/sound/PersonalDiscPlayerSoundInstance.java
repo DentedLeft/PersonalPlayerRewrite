@@ -1,16 +1,19 @@
 package net.dented.personalplayer.sound;
 
-import net.dented.personalplayer.item.ModItems;
 import net.dented.personalplayer.item.custom.PersonalDiscPlayerItem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.dented.personalplayer.mixin.ScreenHandlerMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.random.Random;
+
+import java.util.List;
 
 public class PersonalDiscPlayerSoundInstance extends MovingSoundInstance {
     private final PlayerEntity playerEntity;
@@ -30,9 +33,7 @@ public class PersonalDiscPlayerSoundInstance extends MovingSoundInstance {
 
     @Override
     public void tick() {
-        ItemStack cursor = this.playerEntity.currentScreenHandler.getCursorStack();
-        if (cursor == null) cursor = ItemStack.EMPTY;
-        if (this.playerEntity.isDead()/* || !ItemStack.areEqual(cursor, stack) || !this.playerEntity.getInventory().contains(stack)*/){
+        if (this.playerEntity.isDead()) {
             this.cancel();
         } else {
             this.x = this.playerEntity.getX();

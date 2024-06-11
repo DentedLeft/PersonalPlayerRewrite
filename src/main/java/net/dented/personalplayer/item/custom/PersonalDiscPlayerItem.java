@@ -8,6 +8,7 @@ import net.minecraft.client.item.TooltipType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
 import net.minecraft.screen.slot.Slot;
@@ -125,17 +126,16 @@ public class PersonalDiscPlayerItem extends Item {
             ItemStack stack = discPlayerContentsComponent.get(0);
             if (stack != null && stack.getItem() instanceof MusicDiscItem discItem) {
                 if (user.getWorld().isClient()) {
-                    if (PersonalDiscPlayerSoundInstance.instance != null) {
+                    if (PersonalDiscPlayerSoundInstance.instance == null) {
+                        PersonalDiscPlayerSoundInstance.instance = new PersonalDiscPlayerSoundInstance(discItem.getSound(), user, user.getMainHandStack(), true, 0.8f);
+                        PersonalDiscPlayerSoundInstance.instance.play();
+                    } else {
                         PersonalDiscPlayerSoundInstance.instance.cancel();
                         PersonalDiscPlayerSoundInstance.instance = null;
                     }
-
-                    PersonalDiscPlayerSoundInstance.instance = new PersonalDiscPlayerSoundInstance(discItem.getSound(), user, user.getMainHandStack(), true, 0.8f);
-                    PersonalDiscPlayerSoundInstance.instance.play();
                 }
             }
         }
-
 
         return super.use(world, user, hand);
     }
