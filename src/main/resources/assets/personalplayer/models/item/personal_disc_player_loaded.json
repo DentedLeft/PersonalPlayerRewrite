@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "personalplayer:item/personal_disc_player_loaded"
+  }
+}

@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "net.dented.personalplayer.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins":[
+		"PlayerEntityMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

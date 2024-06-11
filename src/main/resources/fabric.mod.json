@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "personalplayer",
+	"version": "${version}",
+	"name": "Personal Disc Player",
+	"description": "A personal disc player for your convenience",
+	"authors": [
+		"Dented Modding"
+	],
+	"contact": {
+		"homepage": "https://github.com/DentedLeft/Dented-Modding",
+		"issues": "https://github.com/DentedLeft/Dented-Modding/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/personalplayer/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "net.dented.personalplayer.PersonalPlayerMod"
+		],
+		"client": [
+			"net.dented.personalplayer.PersonalPlayerModClient"
+		]
+	},
+	"mixins": [
+      "personalplayer.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.6",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
