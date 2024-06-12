@@ -2,9 +2,15 @@ package net.dented.personalplayer.item.custom;
 
 import com.mojang.datafixers.kinds.Kind1;
 import net.dented.personalplayer.component.DiscPlayerContentsComponent;
+import net.dented.personalplayer.component.DiscPlayerTooltipData;
 import net.dented.personalplayer.component.ModDataComponentTypes;
 import net.dented.personalplayer.sound.PersonalDiscPlayerSoundInstance;
+import net.minecraft.client.gui.screen.option.KeybindsScreen;
+import net.minecraft.client.item.BundleTooltipData;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,9 +26,11 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class PersonalDiscPlayerItem extends Item {
 
@@ -122,7 +130,7 @@ public class PersonalDiscPlayerItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) user.getMainHandStack().get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
-        if (discPlayerContentsComponent != null) {
+        if (discPlayerContentsComponent != null && !discPlayerContentsComponent.isEmpty()) {
             ItemStack stack = discPlayerContentsComponent.get(0);
             if (stack != null && stack.getItem() instanceof MusicDiscItem discItem) {
                 if (user.getWorld().isClient()) {
@@ -141,7 +149,17 @@ public class PersonalDiscPlayerItem extends Item {
     }
 
     @Override
-    public boolean isItemBarVisible(ItemStack stack) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        if (!PersonalDiscPlayerItem.hasDisc(stack)) {
+            if (PersonalDiscPlayerSoundInstance.instance != null) {
+                PersonalDiscPlayerSoundInstance.instance.cancel();
+                PersonalDiscPlayerSoundInstance.instance = null;
+            }
+        }
+    }
+
+    @Override
+    public boolean canBeNested() {
         return false;
     }
 
@@ -155,16 +173,21 @@ public class PersonalDiscPlayerItem extends Item {
 
     public static boolean hasDisc (ItemStack stack) {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) stack.get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
-        if (discPlayerContentsComponent != null && discPlayerContentsComponent.stream().findAny().isPresent()) {
+        if (discPlayerContentsComponent != null && discPlayerContentsComponent.stream().findFirst().isPresent()) {
             return true;
         }
         return false;
     }
 
     @Override
+    public Optional<TooltipData> getTooltipData(ItemStack stack) {
+        return !stack.contains(DataComponentTypes.HIDE_TOOLTIP) && !stack.contains(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP) ? Optional.ofNullable((DiscPlayerContentsComponent)stack.get(ModDataComponentTypes.DISC_PLAYER_CONTENTS)).map(DiscPlayerTooltipData::new) : Optional.empty();
+    }
+
+    @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) stack.get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
-        if (!discPlayerContentsComponent.isEmpty()) {
+        if (discPlayerContentsComponent != null && !discPlayerContentsComponent.isEmpty()) {
             ItemStack itemStack = discPlayerContentsComponent.stream().findFirst().get();
             String translationKey = itemStack.getTranslationKey();
             if (translationKey != null) {
@@ -172,7 +195,6 @@ public class PersonalDiscPlayerItem extends Item {
             }
         } else {
             tooltip.add(Text.translatable("item.personalplayer.personal_disc_player.tooltip").setStyle(Style.EMPTY.withColor(Formatting.GRAY)));
-            super.appendTooltip(stack, context, tooltip, type);
         }
 
     }

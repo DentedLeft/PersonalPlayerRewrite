@@ -14,10 +14,6 @@ public class ModItemGroups {
         PersonalPlayerMod.LOGGER.info("Adding " + PersonalPlayerMod.MOD_ID + " items to vanilla item groups");
     }
 
-    public static void registerModItemGroups() {
-        PersonalPlayerMod.LOGGER.info("Registering item group info for " + PersonalPlayerMod.MOD_ID);
-    }
-
 }
 
 

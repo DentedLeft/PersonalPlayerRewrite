@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ScreenHandler.class)
 public class ScreenHandlerMixin {
 
-    @Inject(method= "insertItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method= "insertItem", at = @At("HEAD"))
     private void insertDiscPlayerTest(ItemStack stack, int startIndex, int endIndex, boolean fromLast, CallbackInfoReturnable<Boolean> cir) {
         ScreenHandler handler = (ScreenHandler) (Object) this;
         if (handler instanceof PlayerScreenHandler) return;
@@ -24,6 +24,5 @@ public class ScreenHandlerMixin {
             }
         }
     }
-
 
 }
