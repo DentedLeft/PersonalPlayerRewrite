@@ -16,7 +16,4 @@ The disc player can be loaded and unloaded similar to the Bundle.
 Once a disc is inserted, music can be played and stopped by using <keybind;key.use> while the item is in the hotbar.
 
 
-The disc player cannot be nested into a Bundle.
-
-
-Music will stop if the disc player is removed from the player inventory while playing.
+Music will stop if the disc player is inserted into a container or removed from the player inventory while playing.
