@@ -150,17 +150,10 @@ public class PersonalDiscPlayerItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if (!PersonalDiscPlayerItem.hasDisc(stack)) {
-            if (PersonalDiscPlayerSoundInstance.instance != null) {
-                PersonalDiscPlayerSoundInstance.instance.cancel();
-                PersonalDiscPlayerSoundInstance.instance = null;
-            }
+        if (!PersonalDiscPlayerItem.hasDisc(stack) && PersonalDiscPlayerSoundInstance.instance != null && ItemStack.areEqual(stack, PersonalDiscPlayerSoundInstance.instance.getStack())) {
+            PersonalDiscPlayerSoundInstance.instance.cancel();
+            PersonalDiscPlayerSoundInstance.instance = null;
         }
-    }
-
-    @Override
-    public boolean canBeNested() {
-        return false;
     }
 
     private void playRemoveOneSound(Entity entity) {
@@ -177,6 +170,7 @@ public class PersonalDiscPlayerItem extends Item {
             return true;
         }
         return false;
+
     }
 
     @Override

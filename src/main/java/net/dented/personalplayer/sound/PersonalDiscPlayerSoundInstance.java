@@ -25,11 +25,13 @@ public class PersonalDiscPlayerSoundInstance extends MovingSoundInstance {
     private final PlayerEntity playerEntity;
     private final ItemStack stack;
     public static PersonalDiscPlayerSoundInstance instance;
+    private final SoundEvent soundEvent;
 
     public PersonalDiscPlayerSoundInstance(SoundEvent soundEvent, PlayerEntity playerEntity, ItemStack stack, boolean repeat, float volume) {
         super(soundEvent, SoundCategory.RECORDS, Random.create());
         this.playerEntity = playerEntity;
         this.stack = stack;
+        this.soundEvent = soundEvent;
         this.repeat = repeat;
         this.volume = volume;
         this.x = this.playerEntity.getX();
@@ -37,9 +39,16 @@ public class PersonalDiscPlayerSoundInstance extends MovingSoundInstance {
         this.z = this.playerEntity.getZ();
     }
 
+    public ItemStack getStack() {
+        return this.stack;
+    }
+
+    public SoundEvent getPersonalDiscPlayerSound() {
+        return this.soundEvent;
+    }
+
     @Override
     public void tick() {
-      //  boolean bl = this.playerEntity.getInventory().contains(this.stack);
         if (!this.playerEntity.getInventory().contains(this.stack) && MinecraftClient.getInstance().options.dropKey.isPressed()) {
             this.cancel();
         }

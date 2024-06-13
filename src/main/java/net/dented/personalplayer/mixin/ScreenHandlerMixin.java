@@ -18,10 +18,9 @@ public class ScreenHandlerMixin {
     private void insertDiscPlayerTest(ItemStack stack, int startIndex, int endIndex, boolean fromLast, CallbackInfoReturnable<Boolean> cir) {
         ScreenHandler handler = (ScreenHandler) (Object) this;
         if (handler instanceof PlayerScreenHandler) return;
-        if (stack.getItem() instanceof PersonalDiscPlayerItem) {
-            if (PersonalDiscPlayerItem.hasDisc(stack) && !PersonalDiscPlayerSoundInstance.instance.isDone()) {
-                PersonalDiscPlayerSoundInstance.instance.cancel();
-            }
+        if (PersonalDiscPlayerItem.hasDisc(stack) && PersonalDiscPlayerSoundInstance.instance != null && ItemStack.areEqual(stack, PersonalDiscPlayerSoundInstance.instance.getStack())) {
+            PersonalDiscPlayerSoundInstance.instance.cancel();
+            PersonalDiscPlayerSoundInstance.instance = null;
         }
     }
 
