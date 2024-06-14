@@ -1,0 +1,10 @@
+{
+  "music_disc.test": {
+    "sounds": [
+      {
+        "name": "music/game/nether/crimson_forest/chrysopoeia",
+        "stream": true
+      }
+    ]
+  }
+}
