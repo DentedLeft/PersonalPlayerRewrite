@@ -21,7 +21,7 @@ public class ModItems {
 
     // Helper Methods
     private static Item registerItem(String name, Item item) {
-        return Registry.register(Registries.ITEM, new Identifier(PersonalPlayerMod.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, Identifier.of(PersonalPlayerMod.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

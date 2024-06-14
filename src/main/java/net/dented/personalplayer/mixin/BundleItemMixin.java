@@ -2,15 +2,20 @@ package net.dented.personalplayer.mixin;
 
 import net.dented.personalplayer.component.DiscPlayerContentsComponent;
 import net.dented.personalplayer.component.ModDataComponentTypes;
-import net.dented.personalplayer.item.custom.PersonalDiscPlayerItem;
 import net.dented.personalplayer.sound.PersonalDiscPlayerSoundInstance;
+import net.dented.personalplayer.util.MusicDiscUtil;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.JukeboxPlayableComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MusicDiscItem;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ClickType;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,8 +29,8 @@ public class BundleItemMixin {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) slot.getStack().get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
         if (discPlayerContentsComponent != null && !discPlayerContentsComponent.isEmpty()) {
             ItemStack disc = discPlayerContentsComponent.get(0);
-            if (disc.getItem() instanceof MusicDiscItem discItem && PersonalDiscPlayerSoundInstance.instance != null) {
-                if (discItem.getSound().equals(PersonalDiscPlayerSoundInstance.instance.getPersonalDiscPlayerSound())) {
+            if (disc.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs"))) && PersonalDiscPlayerSoundInstance.instance != null) {
+                if (MusicDiscUtil.getSoundEvent(disc).getId().equals(PersonalDiscPlayerSoundInstance.instance.getPersonalDiscPlayerSound().getId())) {
                     if (player.getWorld().isClient()) {
                         PersonalDiscPlayerSoundInstance.instance.cancel();
                         PersonalDiscPlayerSoundInstance.instance = null;
@@ -40,8 +45,8 @@ public class BundleItemMixin {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) otherStack.get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
         if (discPlayerContentsComponent != null && !discPlayerContentsComponent.isEmpty()) {
             ItemStack disc = discPlayerContentsComponent.get(0);
-            if (disc.getItem() instanceof MusicDiscItem discItem && PersonalDiscPlayerSoundInstance.instance != null) {
-                if (discItem.getSound().equals(PersonalDiscPlayerSoundInstance.instance.getPersonalDiscPlayerSound())) {
+            if (disc.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs"))) && PersonalDiscPlayerSoundInstance.instance != null) {
+                if (MusicDiscUtil.getSoundEvent(disc).getId().equals(PersonalDiscPlayerSoundInstance.instance.getPersonalDiscPlayerSound().getId())) {
                     if (player.getWorld().isClient()) {
                         PersonalDiscPlayerSoundInstance.instance.cancel();
                         PersonalDiscPlayerSoundInstance.instance = null;

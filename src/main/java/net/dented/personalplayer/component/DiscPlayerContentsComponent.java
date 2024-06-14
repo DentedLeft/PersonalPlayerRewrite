@@ -3,15 +3,18 @@ package net.dented.personalplayer.component;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.entity.BeehiveBlockEntity;
-import net.minecraft.client.item.TooltipData;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MusicDiscItem;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class DiscPlayerContentsComponent implements TooltipData {
+public class DiscPlayerContentsComponent {
     public static final DiscPlayerContentsComponent DEFAULT = new DiscPlayerContentsComponent(List.of());
     public static final Codec<DiscPlayerContentsComponent> CODEC;
     public static final PacketCodec<RegistryByteBuf, DiscPlayerContentsComponent> PACKET_CODEC;
@@ -151,7 +154,7 @@ public class DiscPlayerContentsComponent implements TooltipData {
         }
 
         public int add(ItemStack stack) {
-            if (!stack.isEmpty() && stack.getItem() instanceof MusicDiscItem && stack.getItem().canBeNested()) {
+            if (!stack.isEmpty() && stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs"))) && stack.getItem().canBeNested()) {
                 int i = Math.min(stack.getCount(), this.getMaxAllowed(stack));
                 if (i == 0) {
                     return 0;

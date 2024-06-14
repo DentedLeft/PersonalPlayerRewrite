@@ -1,7 +1,6 @@
 package net.dented.personalplayer.component;
 
-import net.minecraft.client.item.TooltipData;
-import net.minecraft.component.type.BundleContentsComponent;
+import net.minecraft.item.tooltip.TooltipData;
 
 public record DiscPlayerTooltipData(DiscPlayerContentsComponent contents) implements TooltipData {
     public DiscPlayerTooltipData(DiscPlayerContentsComponent contents) {

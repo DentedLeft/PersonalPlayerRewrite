@@ -1,36 +1,37 @@
 package net.dented.personalplayer.item.custom;
 
-import com.mojang.datafixers.kinds.Kind1;
 import net.dented.personalplayer.component.DiscPlayerContentsComponent;
 import net.dented.personalplayer.component.DiscPlayerTooltipData;
 import net.dented.personalplayer.component.ModDataComponentTypes;
 import net.dented.personalplayer.sound.PersonalDiscPlayerSoundInstance;
-import net.minecraft.client.gui.screen.option.KeybindsScreen;
-import net.minecraft.client.item.BundleTooltipData;
-import net.minecraft.client.item.TooltipData;
-import net.minecraft.client.item.TooltipType;
+import net.dented.personalplayer.util.MusicDiscUtil;
+import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
+import net.minecraft.component.type.JukeboxPlayableComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.ai.WardenAngerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.StackReference;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
+import net.minecraft.item.tooltip.TooltipData;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryPair;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class PersonalDiscPlayerItem extends Item {
 
@@ -56,7 +57,7 @@ public class PersonalDiscPlayerItem extends Item {
                         ItemStack itemStack3 = slot.insertStack(itemStack2);
                         builder.add(itemStack3);
                     }
-                } else if (itemStack.getItem().canBeNested() && itemStack.getItem() instanceof MusicDiscItem discItem) {
+                } else if (itemStack.getItem().canBeNested() && itemStack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs")))) {
                     int i = builder.add(slot, player);
                     if (i > 0) {
                     /*    if (player.getWorld().isClient()) {
@@ -95,7 +96,7 @@ public class PersonalDiscPlayerItem extends Item {
                 } else {
                     int i = builder.add(otherStack);
                     stack.set(ModDataComponentTypes.DISC_PLAYER_CONTENTS, builder.build());
-                    if (i > 0 && otherStack.getItem() instanceof MusicDiscItem discItem) {
+                    if (i > 0 && otherStack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs")))) {
                        /* if (player.getWorld().isClient()) {
                             if (PersonalDiscPlayerSoundInstance.instance != null) {
                                 PersonalDiscPlayerSoundInstance.instance.cancel();
@@ -132,10 +133,10 @@ public class PersonalDiscPlayerItem extends Item {
         DiscPlayerContentsComponent discPlayerContentsComponent = (DiscPlayerContentsComponent) user.getMainHandStack().get(ModDataComponentTypes.DISC_PLAYER_CONTENTS);
         if (discPlayerContentsComponent != null && !discPlayerContentsComponent.isEmpty()) {
             ItemStack stack = discPlayerContentsComponent.get(0);
-            if (stack != null && stack.getItem() instanceof MusicDiscItem discItem) {
+            if (stack != null && stack.isIn(TagKey.of(RegistryKeys.ITEM, Identifier.of("c:music_discs")))) {
                 if (user.getWorld().isClient()) {
                     if (PersonalDiscPlayerSoundInstance.instance == null) {
-                        PersonalDiscPlayerSoundInstance.instance = new PersonalDiscPlayerSoundInstance(discItem.getSound(), user, user.getMainHandStack(), true, 0.8f);
+                        PersonalDiscPlayerSoundInstance.instance = new PersonalDiscPlayerSoundInstance(MusicDiscUtil.getSoundEvent(stack), user, user.getMainHandStack(), true, 0.8f);
                         PersonalDiscPlayerSoundInstance.instance.play();
                     } else {
                         PersonalDiscPlayerSoundInstance.instance.cancel();

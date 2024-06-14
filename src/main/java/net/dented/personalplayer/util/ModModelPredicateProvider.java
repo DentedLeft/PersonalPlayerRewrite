@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 public class ModModelPredicateProvider {
 
     public static void registerModModelPredicates() {
-        ModelPredicateProviderRegistry.register(ModItems.PERSONAL_DISC_PLAYER, new Identifier(PersonalPlayerMod.MOD_ID, "disc_loaded"),
+        ModelPredicateProviderRegistry.register(ModItems.PERSONAL_DISC_PLAYER, Identifier.of(PersonalPlayerMod.MOD_ID, "disc_loaded"),
                 (stack, world, entity, seed) -> PersonalDiscPlayerItem.hasDisc(stack) ? 1 : 0);
 
         PersonalPlayerMod.LOGGER.info("Registering model predicates for " + PersonalPlayerMod.MOD_ID);
