@@ -16,8 +16,8 @@ import net.minecraft.util.Identifier;
 public class ModItems {
 
     // Items
-    public static final Item TEST_DISC = registerItem("music_disc_test",
-            new Item(new Item.Settings().maxCount(1).jukeboxPlayable(MusicDiscRegistry.MY_SONG)));
+  //  public static final Item TEST_DISC = registerItem("music_disc_test",
+  //          new Item(new Item.Settings().maxCount(1).jukeboxPlayable(MusicDiscRegistry.MY_SONG)));
     public static final Item PERSONAL_DISC_PLAYER = registerItem("personal_disc_player",
             new PersonalDiscPlayerItem(new Item.Settings().maxCount(1).component(ModDataComponentTypes.DISC_PLAYER_CONTENTS, DiscPlayerContentsComponent.DEFAULT)));
 

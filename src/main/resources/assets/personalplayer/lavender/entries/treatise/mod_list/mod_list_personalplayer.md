@@ -7,7 +7,7 @@
 ```
 [Personal Disc Player](^personalplayer:personalplayer)
 
-__{gray}Version 1.1.0{}__
+__{gray}Version 1.1.4{}__
 
 
 Coding by *Paz*
